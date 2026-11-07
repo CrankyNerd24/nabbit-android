@@ -5,6 +5,9 @@ This project adheres to [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+- Cards on the to-do list show their whole time instead of cutting off
+  after the day
+
 - Quick add shows two notes to a row on the small widget, not one
 
 - The bunny note icon, same as on iPhone, in every launcher shape and

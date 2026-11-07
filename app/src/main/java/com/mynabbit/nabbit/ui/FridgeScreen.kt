@@ -125,9 +125,10 @@ fun FridgeScreen(
                     Shelf.Kind.TOMORROW -> theme.tap1
                     Shelf.Kind.LATER -> theme.tap2
                 }
-                // Later days show the day too; Slipped, Today, and Tomorrow just the time.
+                // Rows on later days show the day too; cards just the time, since the shelf
+                // heading already names the day and a card has no room for both.
                 val time = { r: Reminder ->
-                    if (shelf.kind == Shelf.Kind.LATER) Times.dueDescription(r.dueAt) else Times.clock(r.dueAt)
+                    if (shelf.kind == Shelf.Kind.LATER && showsList) Times.dueDescription(r.dueAt) else Times.clock(r.dueAt)
                 }
                 Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
                     Text(shelf.title, fontSize = 22.sp, fontWeight = FontWeight.Bold, modifier = Modifier.semantics { heading() })
