@@ -5,6 +5,10 @@ This project adheres to [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+- Home says so when a phone setting would make reminders late or
+  quiet (notifications, Alarms & reminders, or full-screen alerts),
+  with a button to turn it on
+
 - Picking Sassy in Settings now shows it as picked
 
 - The mic button's words are bigger and shorter, and the prompt stays

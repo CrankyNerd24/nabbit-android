@@ -147,6 +147,7 @@ fun NabbitRoot() {
                                 banner = Banner("${win.text} is back on the list.")
                             },
                             onSettings = { push(Screen.Settings) },
+                            onRequestNotifications = requestNotifications,
                             banner = banner,
                             onBannerTap = { banner = null },
                         )

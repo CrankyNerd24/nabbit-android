@@ -20,6 +20,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.HelpOutline
 import androidx.compose.material.icons.filled.GraphicEq
 import androidx.compose.material.icons.filled.Mic
+import androidx.compose.material.icons.outlined.ErrorOutline
 import androidx.compose.material.icons.outlined.Settings
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -39,6 +40,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.content.ContextCompat
 import com.mynabbit.nabbit.copy.Copy
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.compose.LifecycleEventEffect
+import com.mynabbit.nabbit.data.AlertStyle
 import com.mynabbit.nabbit.data.Prefs
 import com.mynabbit.nabbit.data.Store
 import com.mynabbit.nabbit.data.VerbStore
@@ -62,6 +66,7 @@ fun HomeScreen(
     onRemove: (Reminder) -> Unit,
     onPutBack: (Reminder) -> Unit,
     onSettings: () -> Unit,
+    onRequestNotifications: () -> Unit,
     banner: Banner?,
     onBannerTap: () -> Unit,
 ) {
@@ -106,6 +111,7 @@ fun HomeScreen(
                 .padding(horizontal = 16.dp, vertical = 8.dp),
             verticalArrangement = Arrangement.spacedBy(20.dp),
         ) {
+            RingWarning(onRequestNotifications)
             MicButton(theme, onHeard)
 
             NoteGrid(verbs.size + 1) { index, modifier ->
@@ -253,6 +259,46 @@ private fun ReminderRow(
             DropdownMenuItem(text = { Text("Tonight") }, onClick = { menu = false; onAct(ReminderAction.TONIGHT, reminder) })
             DropdownMenuItem(text = { Text("Remove") }, onClick = { menu = false; onRemove(reminder) })
         }
+    }
+}
+
+/**
+ * Shows when something Android needs for ringing on time is off: notifications, exact
+ * alarms, or (for Alarm style) full-screen alerts. One at a time, rechecked whenever
+ * Nabbit comes forward, and gone once it's on.
+ */
+@Composable
+private fun RingWarning(onRequestNotifications: () -> Unit) {
+    val context = LocalContext.current
+    val style by Prefs.alertStyle.collectAsState()
+    var refresh by remember { mutableIntStateOf(0) }
+    LifecycleEventEffect(Lifecycle.Event.ON_RESUME) { refresh++ }
+    val problem = remember(refresh, style) {
+        when {
+            !Permissions.notificationsOn(context) ->
+                Triple("Notifications are off, so alerts and nudges can't show up.", "Turn on", onRequestNotifications)
+            !Permissions.exactAlarmsOn(context) ->
+                Triple("Reminders can ring up to 10 minutes late until Alarms & reminders is on.", "Turn on") {
+                    Permissions.openExactAlarmSettings(context)
+                }
+            style == AlertStyle.ALARM && !Permissions.fullScreenOn(context) ->
+                Triple("The alarm can't fill the screen until Full-screen alerts is on.", "Turn on") {
+                    Permissions.openFullScreenSettings(context)
+                }
+            else -> null
+        }
+    } ?: return
+    Row(
+        Modifier
+            .fillMaxWidth()
+            .background(ThemeColor(0xFFFFFF).color, RoundedCornerShape(10.dp))
+            .padding(horizontal = 14.dp, vertical = 10.dp),
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.spacedBy(12.dp),
+    ) {
+        Icon(Icons.Outlined.ErrorOutline, contentDescription = null, tint = ThemeColor(0xB8341B).color)
+        Text(problem.first, fontSize = 15.sp, modifier = Modifier.weight(1f))
+        Button(onClick = problem.third) { Text(problem.second) }
     }
 }
 
