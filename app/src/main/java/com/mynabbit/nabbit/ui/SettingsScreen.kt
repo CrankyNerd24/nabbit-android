@@ -71,9 +71,11 @@ fun SettingsScreen(theme: NabbitTheme, onRequestNotifications: () -> Unit, onBac
                 ThemeSwatches(themeId) { Prefs.setTheme(it) }
             }
 
-            Group("Tone", footer = Tone.entries.first { it == Tone.current }.sample +
+            // From the collected state, so the chips redraw the moment the tone changes.
+            val shownTone = tone.takeIf { it.offered } ?: Tone.PLAIN
+            Group("Tone", footer = shownTone.sample +
                 "\nSalty and Sweary need an age check, coming in a later version.") {
-                Choices(Tone.entries.filter { it.offered }, Tone.current, { it.title }) { Prefs.setTone(it) }
+                Choices(Tone.entries.filter { it.offered }, shownTone, { it.title }) { Prefs.setTone(it) }
             }
 
             Group(

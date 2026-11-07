@@ -5,6 +5,8 @@ This project adheres to [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+- Picking Sassy in Settings now shows it as picked
+
 - The mic button's words are bigger and shorter, and the prompt stays
   on one line so it reads at a glance
 
