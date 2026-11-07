@@ -143,8 +143,10 @@ fun NabbitRoot() {
                                 banner = Banner(Copy.removed(reminder.thing), undo = { Store.restore(reminder) })
                             },
                             onPutBack = { win ->
-                                Store.reopen(win.id)
-                                banner = Banner("${win.text} is back on the list.")
+                                Store.putBack(win.id)
+                                Store.reminder(win.id)?.let {
+                                    banner = Banner("${it.text} is back, ${Times.dueDescription(it.dueAt)}.")
+                                }
                             },
                             onSettings = { push(Screen.Settings) },
                             onRequestNotifications = requestNotifications,

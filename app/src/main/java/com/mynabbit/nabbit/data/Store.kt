@@ -83,6 +83,15 @@ object Store {
 
     fun reopen(id: String) = updateReminder(id) { it.copy(completedAt = null) }
 
+    /**
+     * A win put back on the list. It keeps its time if that's still ahead; if it's passed,
+     * it comes back due in 15 minutes so its alert and nudges ring again.
+     */
+    fun putBack(id: String) = updateReminder(id) {
+        val now = System.currentTimeMillis()
+        it.copy(completedAt = null, dueAt = if (it.dueAt > now) it.dueAt else now + 15 * 60_000L)
+    }
+
     fun snooze(id: String, until: Long) = updateReminder(id) { it.copy(dueAt = until, snoozeCount = it.snoozeCount + 1) }
 
     /** Puts a reminder back exactly as it was, for Undo. */

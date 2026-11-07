@@ -5,6 +5,10 @@ This project adheres to [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+- A win you put back on the list rings again: if its time has passed,
+  it comes back due in 15 minutes instead of waiting for you to open
+  Nabbit
+
 - A time from Pick day & time rings at exactly that minute, even when
   it's only a minute or two away
 
