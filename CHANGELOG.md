@@ -5,6 +5,8 @@ This project adheres to [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+## [1.0.0] - 2026-11-07
+
 - The small Next up widget spells out 15 min and Tonight, with Done on
   its own row above them
 
