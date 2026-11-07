@@ -1,6 +1,7 @@
 package com.mynabbit.nabbit.ui
 
 import android.Manifest
+import android.app.Activity
 import android.content.pm.PackageManager
 import android.os.Build
 import androidx.activity.compose.BackHandler
@@ -30,6 +31,8 @@ import com.mynabbit.nabbit.model.Times
 import com.mynabbit.nabbit.model.Verb
 import com.mynabbit.nabbit.voice.VoiceParser
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+import com.mynabbit.nabbit.support.ReviewPrompt
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 
@@ -108,6 +111,23 @@ fun NabbitRoot() {
         }
     }
 
+    val scope = rememberCoroutineScope()
+    val activity = context as? Activity
+
+    /**
+     * After the day's cleared, once the celebration has played. Never while anything else
+     * is going on: a capture step, the mic, the New verb box, Settings, the to-do list, or
+     * an alert. Then it waits for the next clear board.
+     */
+    fun askForReviewIfDue() {
+        if (activity == null || !ReviewPrompt.recordClearedDay(context)) return
+        scope.launch {
+            delay(2_500)
+            val idle = stack == listOf<Screen>(Screen.Home) && AlertCenter.current.value == null && !ReviewPrompt.busy
+            if (idle) ReviewPrompt.ask(activity)
+        }
+    }
+
     fun push(screen: Screen) { stack = stack + screen }
     fun pop() { if (stack.size > 1) stack = stack.dropLast(1) }
     fun home() { stack = listOf(Screen.Home) }
@@ -130,6 +150,7 @@ fun NabbitRoot() {
             celebration = done
             Haptics.play(context, done.size)
             banner = Banner(done.line, undo = { Store.reopen(reminder.id) })
+            if (clearsBoard) askForReviewIfDue()
         } else {
             Reminders.perform(context, action, reminder.id)
             Store.reminder(reminder.id)?.let { banner = Banner(Copy.moved(it.thing, it.dueAt)) }

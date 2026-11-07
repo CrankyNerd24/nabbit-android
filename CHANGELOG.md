@@ -5,6 +5,14 @@ This project adheres to [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+- Nabbit stays free, with no ads and no subscription. If it helps you,
+  Settings > Keep Nabbit going takes an optional tip toward the upkeep.
+  A tip doesn't unlock anything
+
+- Now and then, right after you clear the whole day, Nabbit may ask for
+  a Google Play review. Never while you're making a reminder, and at
+  most once every few months
+
 - Two home screen widgets. Next up shows what's due next with Done,
   15 min, and Tonight right on it, plus the two after it when it's
   wide. Quick add holds your hot keys and verbs, so one tap starts a

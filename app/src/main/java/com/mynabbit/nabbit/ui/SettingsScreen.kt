@@ -1,5 +1,6 @@
 package com.mynabbit.nabbit.ui
 
+import android.app.Activity
 import android.content.Intent
 import androidx.core.net.toUri
 import androidx.compose.foundation.background
@@ -37,6 +38,7 @@ import com.mynabbit.nabbit.data.Prefs
 import com.mynabbit.nabbit.data.VerbStore
 import com.mynabbit.nabbit.model.NudgeTiming
 import com.mynabbit.nabbit.model.Times
+import com.mynabbit.nabbit.support.TipJar
 
 /** Every change applies the moment it's made. No Save button. */
 @OptIn(ExperimentalMaterial3Api::class)
@@ -113,6 +115,30 @@ fun SettingsScreen(theme: NabbitTheme, onRequestNotifications: () -> Unit, onBac
 
             Group("Ring on time", footer = "Android needs these on for Nabbit to ring at the minute it's due.") {
                 RingOnTimeChecklist(onRequestNotifications)
+            }
+
+            val tips by TipJar.tips.collectAsState()
+            val buying by TipJar.buying.collectAsState()
+            val thanks by TipJar.thanks.collectAsState()
+            if (tips.isNotEmpty()) {
+                Group(
+                    "Keep Nabbit going",
+                    footer = "Nabbit is free, with no ads, no account, and no subscription. If it helps you, " +
+                        "a tip covers the upkeep. It doesn't unlock anything: it's all yours already.",
+                ) {
+                    tips.forEach { tip ->
+                        OutlinedButton(
+                            onClick = { (context as? Activity)?.let { TipJar.buy(it, tip) } },
+                            enabled = buying == null,
+                            modifier = Modifier.fillMaxWidth().heightIn(min = 52.dp),
+                        ) {
+                            Text(tip.name, modifier = Modifier.weight(1f))
+                            if (buying == tip.id) CircularProgressIndicator(Modifier.size(20.dp), strokeWidth = 2.dp)
+                            else Text(tip.price)
+                        }
+                    }
+                    thanks?.let { Text(it, fontWeight = FontWeight.Bold, fontSize = 17.sp) }
+                }
             }
 
             val hidden = VerbStore.hidden(layout)

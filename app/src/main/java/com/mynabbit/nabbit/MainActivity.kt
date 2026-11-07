@@ -10,6 +10,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import com.mynabbit.nabbit.alerts.AlertCenter
 import com.mynabbit.nabbit.alerts.Scheduler
+import com.mynabbit.nabbit.support.TipJar
 import com.mynabbit.nabbit.ui.CaptureRequest
 import com.mynabbit.nabbit.ui.NabbitRoot
 import kotlinx.coroutines.launch
@@ -19,6 +20,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         handle(intent)
+        TipJar.start(this)
         // Over the lock screen while an alert is up, and back to normal once it's handled.
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {

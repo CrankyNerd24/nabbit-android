@@ -170,6 +170,15 @@ object Copy {
         Tone.SWEARY -> "$text, $count fucking times. Want a hot key?"
     }
 
+    /** After a tip in Settings. */
+    val tipThanks: String
+        get() = when (tone) {
+            Tone.PLAIN -> "Thank you. That keeps Nabbit going."
+            Tone.SASSY -> "Look at you, keeping the fridge lights on. Thank you."
+            Tone.SALTY -> "Well, damn. Thank you. Seriously."
+            Tone.SWEARY -> "Holy shit, thank you. Seriously."
+        }
+
     /** "Call who?" on the second tap. */
     fun thingPrompt(verb: Verb): String {
         val prompt = verb.thingPrompt

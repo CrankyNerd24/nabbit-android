@@ -52,6 +52,7 @@ import com.mynabbit.nabbit.model.ReminderAction
 import com.mynabbit.nabbit.model.Thing
 import com.mynabbit.nabbit.model.Times
 import com.mynabbit.nabbit.model.Verb
+import com.mynabbit.nabbit.support.ReviewPrompt
 import com.mynabbit.nabbit.voice.SpeechListener
 
 /** Home, top to bottom: the mic, the verb grid, Today and Coming up, the hot key offer, Again?, then Wins today. */
@@ -78,6 +79,7 @@ fun HomeScreen(
     Prefs.tone.collectAsState().value // Redraw copy when the tone changes.
     val verbs = VerbStore.visible(layout)
     var addingVerb by remember { mutableStateOf(false) }
+    LaunchedEffect(addingVerb) { ReviewPrompt.dialogOpen = addingVerb }
 
     val tomorrow = Times.startOfTomorrow()
     val open = data.reminders.filter { !it.isDone }.sortedBy { it.dueAt }
@@ -343,6 +345,7 @@ private fun MicButton(theme: NabbitTheme, onHeard: (String) -> Unit) {
         if (granted) listener.start(onHeard)
     }
     val listening = listener.state == SpeechListener.State.LISTENING
+    LaunchedEffect(listening) { ReviewPrompt.micListening = listening }
     val title = when (listener.state) {
         SpeechListener.State.LISTENING -> listener.transcript.ifEmpty { "Listening…" }
         SpeechListener.State.UNAVAILABLE -> "Speech isn't available on this phone."
