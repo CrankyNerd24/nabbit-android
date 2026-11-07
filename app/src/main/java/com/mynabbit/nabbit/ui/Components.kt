@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -118,6 +119,8 @@ fun BannerView(text: String, fill: ThemeColor, onUndo: (() -> Unit)?, onTap: () 
     Box(
         Modifier
             .fillMaxWidth()
+            // Clear of the navigation bar, since the app draws edge to edge.
+            .navigationBarsPadding()
             .padding(16.dp)
             .shadow(4.dp, RoundedCornerShape(12.dp))
             .background(fill.color, RoundedCornerShape(12.dp))

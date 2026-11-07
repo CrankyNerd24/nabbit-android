@@ -5,6 +5,9 @@ This project adheres to [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+- The line at the bottom of Home, with Undo, sits above the navigation
+  bar instead of under it
+
 - Pick day & time is quicker: pick the day on the calendar, then tap a
   time and it's saved. No clock to work through, and Another time
   takes an exact minute
