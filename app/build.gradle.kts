@@ -14,7 +14,7 @@ android {
         // Android 16. Compiled against 17 for the newest Compose libraries.
         targetSdk = 36
         versionCode = 1
-        versionName = "0.1.0"
+        versionName = "1.0.0"
     }
 
     buildTypes {
