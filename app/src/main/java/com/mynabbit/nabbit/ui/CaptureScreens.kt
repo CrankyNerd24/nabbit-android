@@ -2,8 +2,6 @@ package com.mynabbit.nabbit.ui
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.relocation.BringIntoViewRequester
 import androidx.compose.foundation.relocation.bringIntoViewRequester
 import androidx.compose.foundation.rememberScrollState
@@ -27,9 +25,11 @@ import com.mynabbit.nabbit.data.Store
 import com.mynabbit.nabbit.model.Times
 import com.mynabbit.nabbit.model.Verb
 import com.mynabbit.nabbit.model.WhenPreset
+import java.time.Instant
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
+import java.time.ZoneOffset
 import java.util.Locale
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -79,9 +79,9 @@ fun ThingStep(verb: Verb, theme: NabbitTheme, onPick: (String) -> Unit, onBack: 
 }
 
 /**
- * Third tap: when. Tapping a chip saves. Pick day & time opens a row of days (the next
- * Morning's day picked) and every half hour from 6 AM to 10 PM, scrolled to the Morning
- * time; tapping a time saves. Another time… takes an exact minute.
+ * Third tap: when. Tapping a chip saves. Pick day & time opens a calendar (the next
+ * Morning's day picked) and, under it, every half hour from 6 AM to 10 PM; tapping a time
+ * saves. Picking a day scrolls to its Morning time. Another time… takes an exact minute.
  */
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
 @Composable
@@ -89,9 +89,18 @@ fun WhenStep(verb: Verb, thing: String, theme: NabbitTheme, onSave: (Long) -> Un
     var picking by remember { mutableStateOf(false) }
     var exact by remember { mutableStateOf(false) }
     val morning by Prefs.morningHour.collectAsState()
-    val days = remember { pickableDays() }
-    var day by remember { mutableStateOf(Times.nextMorning().toLocalDate().takeIf { it in days } ?: days.first()) }
+    val firstDay = remember { if (halfHours(LocalDate.now()).isEmpty()) LocalDate.now().plusDays(1) else LocalDate.now() }
+    val dateState = rememberDatePickerState(
+        initialSelectedDateMillis = utcMillis(Times.nextMorning().toLocalDate().coerceAtLeast(firstDay)),
+        yearRange = LocalDate.now().year..LocalDate.now().year + 1,
+        selectableDates = object : SelectableDates {
+            override fun isSelectableDate(utcTimeMillis: Long): Boolean = !fromUtcMillis(utcTimeMillis).isBefore(firstDay)
+            override fun isSelectableYear(year: Int): Boolean = year >= firstDay.year
+        },
+    )
+    val day = dateState.selectedDateMillis?.let(::fromUtcMillis) ?: firstDay
     val times = halfHours(day)
+    val calendar = remember { BringIntoViewRequester() }
     val morningTime = remember { BringIntoViewRequester() }
 
     StepScaffold("When?", onBack) {
@@ -108,18 +117,15 @@ fun WhenStep(verb: Verb, thing: String, theme: NabbitTheme, onSave: (Long) -> Un
         }
 
         if (picking) {
-            Text("Day", fontWeight = FontWeight.Bold, fontSize = 20.sp, modifier = Modifier.semantics { heading() })
-            LazyRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                items(days) { option ->
-                    FilterChip(
-                        selected = option == day,
-                        onClick = { day = option },
-                        label = { Text(dayLabel(option), fontSize = 16.sp) },
-                        modifier = Modifier.heightIn(min = 48.dp),
-                    )
-                }
-            }
-            Text("Time", fontWeight = FontWeight.Bold, fontSize = 20.sp, modifier = Modifier.semantics { heading() })
+            DatePicker(
+                state = dateState,
+                title = null,
+                headline = null,
+                showModeToggle = false,
+                colors = DatePickerDefaults.colors(containerColor = ThemeColor.PAPER.color),
+                modifier = Modifier.bringIntoViewRequester(calendar),
+            )
+            Text("${dayLabel(day)}, at", fontWeight = FontWeight.Bold, fontSize = 20.sp, modifier = Modifier.semantics { heading() })
             val columns = if (LocalDensity.current.fontScale >= 1.3f) 2 else 3
             Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
                 (times.map { it as LocalDateTime? } + listOf(null)).chunked(columns).forEach { row ->
@@ -143,8 +149,12 @@ fun WhenStep(verb: Verb, thing: String, theme: NabbitTheme, onSave: (Long) -> Un
                     }
                 }
             }
-            // Lands on the usual pick: the Morning time.
-            LaunchedEffect(day) { morningTime.bringIntoView() }
+            // Opening shows the calendar; picking a day moves on to its times, at the Morning time.
+            var opened by remember { mutableStateOf(false) }
+            LaunchedEffect(day) {
+                if (opened) morningTime.bringIntoView() else calendar.bringIntoView()
+                opened = true
+            }
         }
     }
 
@@ -170,12 +180,10 @@ fun WhenStep(verb: Verb, thing: String, theme: NabbitTheme, onSave: (Long) -> Un
     }
 }
 
-/** Today (while a half hour is left) and the next two weeks. */
-private fun pickableDays(): List<LocalDate> {
-    val today = LocalDate.now()
-    val first = if (halfHours(today).isEmpty()) 1L else 0L
-    return (first..14L).map { today.plusDays(it) }
-}
+/** The date picker works in UTC midnights. */
+private fun utcMillis(day: LocalDate): Long = day.atStartOfDay(ZoneOffset.UTC).toInstant().toEpochMilli()
+
+private fun fromUtcMillis(millis: Long): LocalDate = Instant.ofEpochMilli(millis).atOffset(ZoneOffset.UTC).toLocalDate()
 
 /** Every half hour from 6 AM to 10 PM on a day, the ones still ahead. */
 private fun halfHours(day: LocalDate): List<LocalDateTime> {
