@@ -31,6 +31,7 @@ The Android version of **Nabbit**, the ADHD reminder app ("Remind me in Nabbit t
 - `voice/`: `SpeechListener`, `VoiceParser`.
 - `ui/`: `NabbitRoot` (simple screen stack: Home, Thing, When, Settings; banners, celebrations, and the alert overlay), `HomeScreen`, `CaptureScreens`, `AlertScreen`, `SettingsScreen`, `IntroScreens`, `Components` (`StickyNote`, `NoteGrid`, `TaskAndTime`, `BannerView`), `Theme` (the five themes and WCAG text color).
 - Pick day & time (`WhenStep`): an inline calendar (no dialog; the next Morning's day picked, today only while times remain) and under it half-hour time notes from 6 AM to 10 PM; tapping a time saves. Picking a day scrolls to its Morning time. Another time… opens a `TimeInput` for an exact minute. No clock dialog: it cost too many taps.
+- `FridgeScreen`: the eye at the top left of Home. Every open reminder as tilted note cards (or a plain list, `Prefs.fridgeShowsList`) in shelves: Slipped (alert), Today (tap 3), Tomorrow (tap 1), later days (tap 2). A tap is Done with a small haptic and a line with Undo, no confetti (`NabbitRoot.fridgeAct`); press and hold or TalkBack actions give 15 min and Tonight. Keeps the screen on while open.
 - `MainActivity` shows over the lock screen only while an alert is up, and reschedules plus checks for due reminders on every resume.
 
 ## Accessibility
@@ -41,7 +42,7 @@ Every press-and-hold menu item is also a TalkBack custom action. Banners are liv
 
 Three taps and the mic, the full-screen alarm with Done / 15 min / Tonight, nudges, Today / Coming up / Wins today, hot keys, Settings (theme, Plain and Sassy tones, default times, alert style, nudge gap, ring-on-time checklist), themes, celebrations, and the two first-open cards.
 
-Next: widgets (Next up, Quick add), the to-do list board, the tip jar and review prompt (Play Billing, Play In-App Review), Salty and Sweary with Age Signals, the bunny icon. Later or never: Wear OS, voice-assistant integration.
+Next: widgets (Next up, Quick add), the tip jar and review prompt (Play Billing, Play In-App Review), Salty and Sweary with Age Signals, the bunny icon. Later or never: Wear OS, voice-assistant integration.
 
 ## Building and checks
 

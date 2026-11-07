@@ -17,6 +17,7 @@ import androidx.core.content.ContextCompat
 import com.mynabbit.nabbit.alerts.AlertCenter
 import com.mynabbit.nabbit.alerts.Notifier
 import com.mynabbit.nabbit.celebration.Celebration
+import com.mynabbit.nabbit.celebration.CelebrationLines
 import com.mynabbit.nabbit.celebration.CelebrationOverlay
 import com.mynabbit.nabbit.celebration.Haptics
 import com.mynabbit.nabbit.copy.Copy
@@ -36,6 +37,7 @@ sealed interface Screen {
     data class Thing(val verb: Verb) : Screen
     data class When(val verb: Verb, val thing: String) : Screen
     data object Settings : Screen
+    data object Fridge : Screen
 }
 
 @Composable
@@ -102,6 +104,18 @@ fun NabbitRoot() {
         }
     }
 
+    /** On the to-do list, Done is quieter: a small tap and a line with Undo, no confetti. */
+    fun fridgeAct(action: ReminderAction, reminder: Reminder) {
+        if (action == ReminderAction.DONE) {
+            Haptics.tap(context)
+            val line = CelebrationLines.next(reminder)
+            Reminders.perform(context, action, reminder.id)
+            banner = Banner(line, undo = { Store.reopen(reminder.id) })
+        } else {
+            act(action, reminder)
+        }
+    }
+
     fun heard(text: String) {
         val spoken = VoiceParser.parse(text, morningHour = Prefs.morningHour.value, tonightHour = Prefs.tonightHour.value)
         val verb = spoken.verb ?: run { banner = Banner(Copy.missed); return }
@@ -149,6 +163,7 @@ fun NabbitRoot() {
                                 }
                             },
                             onSettings = { push(Screen.Settings) },
+                            onFridge = { push(Screen.Fridge) },
                             onRequestNotifications = requestNotifications,
                             banner = banner,
                             onBannerTap = { banner = null },
@@ -158,6 +173,7 @@ fun NabbitRoot() {
                             saved(Store.save(screen.verb, screen.thing, due))
                         }, onBack = ::pop)
                         Screen.Settings -> SettingsScreen(theme, requestNotifications, onBack = ::pop)
+                        Screen.Fridge -> FridgeScreen(theme, now, ::fridgeAct, banner, onBannerTap = { banner = null }, onBack = ::pop)
                     }
                 }
             }

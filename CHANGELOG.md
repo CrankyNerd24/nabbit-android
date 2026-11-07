@@ -5,6 +5,11 @@ This project adheres to [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+- The to-do list: tap the eye at the top of Home for everything coming
+  up as notes on a board, slipped first, then today, tomorrow, and each
+  day after. Cards or a plain list, tap a note when it's done (with
+  Undo), press and hold for 15 min or Tonight. The screen stays on
+
 - The line at the bottom of Home, with Undo, sits above the navigation
   bar instead of under it
 

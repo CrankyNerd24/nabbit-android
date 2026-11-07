@@ -22,6 +22,7 @@ import androidx.compose.material.icons.filled.GraphicEq
 import androidx.compose.material.icons.filled.Mic
 import androidx.compose.material.icons.outlined.ErrorOutline
 import androidx.compose.material.icons.outlined.Settings
+import androidx.compose.material.icons.outlined.Visibility
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -66,6 +67,7 @@ fun HomeScreen(
     onRemove: (Reminder) -> Unit,
     onPutBack: (Reminder) -> Unit,
     onSettings: () -> Unit,
+    onFridge: () -> Unit,
     onRequestNotifications: () -> Unit,
     banner: Banner?,
     onBannerTap: () -> Unit,
@@ -92,6 +94,11 @@ fun HomeScreen(
             TopAppBar(
                 title = { Text("Nabbit", fontWeight = FontWeight.Black, fontSize = 30.sp) },
                 colors = TopAppBarDefaults.topAppBarColors(containerColor = ThemeColor.PAPER.color),
+                navigationIcon = {
+                    IconButton(onClick = onFridge) {
+                        Icon(Icons.Outlined.Visibility, contentDescription = "On the to-do list")
+                    }
+                },
                 actions = {
                     IconButton(onClick = {
                         context.startActivity(Intent(Intent.ACTION_VIEW, "https://mynabbit.com/support.html".toUri()))

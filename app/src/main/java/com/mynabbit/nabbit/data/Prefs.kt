@@ -53,6 +53,9 @@ object Prefs {
     val alertsIntroShown: StateFlow<Boolean> = _alertsIntroShown
     private val _verbLayout = MutableStateFlow(VerbLayout())
     val verbLayout: StateFlow<VerbLayout> = _verbLayout
+    /** The to-do list as a plain list instead of cards, remembered between visits. */
+    private val _fridgeShowsList = MutableStateFlow(false)
+    val fridgeShowsList: StateFlow<Boolean> = _fridgeShowsList
 
     fun init(context: Context) {
         if (::prefs.isInitialized) return
@@ -66,6 +69,7 @@ object Prefs {
         _nudgeMinutes.value = prefs.getInt("nudgeMinutes", NudgeTiming.DEFAULT_MINUTES)
         _themeIntroShown.value = prefs.getBoolean("themeIntroShown", false)
         _alertsIntroShown.value = prefs.getBoolean("alertsIntroShown", false)
+        _fridgeShowsList.value = prefs.getBoolean("fridgeShowsList", false)
         _verbLayout.value = prefs.getString("verbLayout", null)
             ?.let { runCatching { json.decodeFromString<VerbLayout>(it) }.getOrNull() } ?: VerbLayout()
     }
@@ -78,6 +82,7 @@ object Prefs {
     fun setNudgeMinutes(minutes: Int) = set(_nudgeMinutes, minutes) { putInt("nudgeMinutes", it) }
     fun setThemeIntroShown() = set(_themeIntroShown, true) { putBoolean("themeIntroShown", it) }
     fun setAlertsIntroShown() = set(_alertsIntroShown, true) { putBoolean("alertsIntroShown", it) }
+    fun setFridgeShowsList(list: Boolean) = set(_fridgeShowsList, list) { putBoolean("fridgeShowsList", it) }
     fun setVerbLayout(layout: VerbLayout) =
         set(_verbLayout, layout) { putString("verbLayout", json.encodeToString(VerbLayout.serializer(), it)) }
 
