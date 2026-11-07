@@ -12,6 +12,8 @@ import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.text.BasicText
+import androidx.compose.foundation.text.TextAutoSize
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
@@ -30,7 +32,9 @@ import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.customActions
 import androidx.compose.ui.semantics.heading
 import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.content.ContextCompat
@@ -312,9 +316,14 @@ private fun MicButton(theme: NabbitTheme, onHeard: (String) -> Unit) {
         horizontalArrangement = Arrangement.spacedBy(14.dp),
     ) {
         Icon(if (listening) Icons.Filled.GraphicEq else Icons.Filled.Mic, null, tint = fill.text.color, modifier = Modifier.size(36.dp))
-        Text(
-            title, color = fill.text.color, fontWeight = FontWeight.Bold, fontSize = 20.sp, lineHeight = 24.sp,
-            maxLines = 3, overflow = androidx.compose.ui.text.style.TextOverflow.Ellipsis,
+        // The prompt shrinks a little to stay on one line; what's heard wraps instead.
+        val idle = listener.state == SpeechListener.State.IDLE
+        BasicText(
+            title,
+            style = TextStyle(color = fill.text.color, fontWeight = FontWeight.Bold, fontSize = 20.sp, lineHeight = 24.sp),
+            maxLines = if (idle) 1 else 3,
+            overflow = TextOverflow.Ellipsis,
+            autoSize = if (idle) TextAutoSize.StepBased(minFontSize = 15.sp, maxFontSize = 20.sp) else null,
         )
     }
 }
