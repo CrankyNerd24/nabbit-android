@@ -48,7 +48,7 @@ App icon: the bunny note (tentative, like iPhone), redrawn as an adaptive vector
 
 ## Building and checks
 
-- `./gradlew :app:assembleDebug :app:testDebugUnitTest :app:lintDebug` before every push. Lint should stay at 0 errors.
+- `./gradlew :app:assembleDebug :app:assembleRelease :app:testDebugUnitTest :app:lintDebug` before every push. Lint should stay at 0 errors. The release build runs R8, which debug doesn't: missing-class warnings from libraries go in `app/proguard-rules.pro` as `-dontwarn` (with a comment saying why), and anything found by name at run time (Glance's `ActionCallback`) needs a `-keep`.
 - Test alarms on a real phone when possible; emulators handle them, but battery savers on Samsung, Xiaomi, and others can delay them.
 
 ## Changelog
