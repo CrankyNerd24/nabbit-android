@@ -1,0 +1,15 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp" android:height="108dp" android:viewportWidth="108" android:viewportHeight="108">
+    <!-- The bunny note from the iPhone icon (Nabbit repo, Design/AppIcon/AppIcon.svg), scaled into the safe zone. -->
+    <group android:translateX="54" android:translateY="61.5">
+        <group android:scaleX="0.072" android:scaleY="0.072" android:rotation="-5">
+            <group android:rotation="-12" android:pivotX="-110" android:pivotY="-300">
+                <path android:fillColor="#FFFFFF" android:pathData="M-172,-300 a62,170 0 1,0 124,0 a62,170 0 1,0 -124,0 z" />
+            </group>
+            <group android:rotation="12" android:pivotX="110" android:pivotY="-300">
+                <path android:fillColor="#FFFFFF" android:pathData="M48,-300 a62,170 0 1,0 124,0 a62,170 0 1,0 -124,0 z" />
+            </group>
+            <path android:strokeColor="#FFFFFF" android:strokeWidth="60" android:strokeLineCap="round" android:strokeLineJoin="round" android:pathData="M-120,40 L-30,130 L140,-60" />
+        </group>
+    </group>
+</vector>

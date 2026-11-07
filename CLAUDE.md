@@ -44,7 +44,7 @@ Every press-and-hold menu item is also a TalkBack custom action. Banners are liv
 
 Three taps and the mic, the full-screen alarm with Done / 15 min / Tonight, nudges, Today / Coming up / Wins today, hot keys, Settings (theme, tones, default times, alert style, nudge gap, ring-on-time checklist), themes, celebrations, and the two first-open cards.
 
-Next: the bunny icon. Later or never: Wear OS, voice-assistant integration.
+App icon: the bunny note (tentative, like iPhone), redrawn as an adaptive vector from the iPhone repo's `Design/AppIcon/AppIcon.svg` (`ic_launcher_foreground`, a shape-only `ic_launcher_monochrome` for themed icons, background `#FAC775`). Later or never: Wear OS, voice-assistant integration.
 
 ## Building and checks
 

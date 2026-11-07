@@ -5,6 +5,9 @@ This project adheres to [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+- The bunny note icon, same as on iPhone, in every launcher shape and
+  in themed icons
+
 - Salty (16+) and Sweary (18+) tones: tap one and Google Play asks
   once to share your age range. If it's shared and old enough, it
   unlocks; otherwise it stays locked and Plain and Sassy are there
