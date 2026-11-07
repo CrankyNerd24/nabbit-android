@@ -5,6 +5,9 @@ This project adheres to [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+- The small Next up widget spells out 15 min and Tonight, with Done on
+  its own row above them
+
 - Cards on the to-do list show their whole time instead of cutting off
   after the day
 

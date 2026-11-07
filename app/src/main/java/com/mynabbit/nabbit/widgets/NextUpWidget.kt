@@ -97,12 +97,24 @@ private fun NextUp() {
                 Text(label(next, now), style = text(fill, 13, bold = true), maxLines = 1)
                 Text(next.text, style = text(fill, 18, bold = true), maxLines = 2)
                 Spacer(GlanceModifier.defaultWeight())
-                Row(GlanceModifier.fillMaxWidth()) {
-                    Pill("Done", next, ReminderAction.DONE, theme.done, GlanceModifier.defaultWeight())
-                    Spacer(GlanceModifier.width(4.dp))
-                    Pill(if (wide) "15 min" else "15m", next, ReminderAction.SNOOZE_15, ThemeColor(0xFFFFFF), GlanceModifier)
-                    Spacer(GlanceModifier.width(4.dp))
-                    Pill(if (wide) "Tonight" else "PM", next, ReminderAction.TONIGHT, ThemeColor(0xFFFFFF), GlanceModifier)
+                // Words, not symbols: a moon reads as Do Not Disturb on Android. On the small
+                // widget Done gets its own row so 15 min and Tonight fit spelled out.
+                if (wide) {
+                    Row(GlanceModifier.fillMaxWidth()) {
+                        Pill("Done", next, ReminderAction.DONE, theme.done, GlanceModifier.defaultWeight())
+                        Spacer(GlanceModifier.width(4.dp))
+                        Pill("15 min", next, ReminderAction.SNOOZE_15, ThemeColor(0xFFFFFF), GlanceModifier)
+                        Spacer(GlanceModifier.width(4.dp))
+                        Pill("Tonight", next, ReminderAction.TONIGHT, ThemeColor(0xFFFFFF), GlanceModifier)
+                    }
+                } else {
+                    Pill("Done", next, ReminderAction.DONE, theme.done, GlanceModifier.fillMaxWidth())
+                    Spacer(GlanceModifier.height(4.dp))
+                    Row(GlanceModifier.fillMaxWidth()) {
+                        Pill("15 min", next, ReminderAction.SNOOZE_15, ThemeColor(0xFFFFFF), GlanceModifier.defaultWeight())
+                        Spacer(GlanceModifier.width(4.dp))
+                        Pill("Tonight", next, ReminderAction.TONIGHT, ThemeColor(0xFFFFFF), GlanceModifier.defaultWeight())
+                    }
                 }
             }
         }
@@ -133,7 +145,7 @@ private fun Pill(title: String, reminder: Reminder, action: ReminderAction, fill
             .semantics { contentDescription = "${action.title}: ${reminder.text}" },
         contentAlignment = Alignment.Center,
     ) {
-        Text(title, style = text(fill, 14, bold = true), maxLines = 1)
+        Text(title, style = text(fill, 13, bold = true), maxLines = 1)
     }
 }
 
