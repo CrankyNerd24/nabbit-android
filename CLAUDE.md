@@ -30,6 +30,7 @@ The Android version of **Nabbit**, the ADHD reminder app ("Remind me in Nabbit t
 - `celebration/`: sizing and rotating lines (`Celebration`, `CelebrationLines`), the confetti overlay (a color flash when animations are off), and `Haptics`.
 - `voice/`: `SpeechListener`, `VoiceParser`.
 - `ui/`: `NabbitRoot` (simple screen stack: Home, Thing, When, Settings; banners, celebrations, and the alert overlay), `HomeScreen`, `CaptureScreens`, `AlertScreen`, `SettingsScreen`, `IntroScreens`, `Components` (`StickyNote`, `NoteGrid`, `TaskAndTime`, `BannerView`), `Theme` (the five themes and WCAG text color).
+- Pick day & time (`WhenStep`) matches the watch: a row of days (today while times remain, then two weeks, the next Morning's day picked) and half-hour time notes from 6 AM to 10 PM scrolled to the Morning time; tapping a time saves. Another time… opens a `TimeInput` for an exact minute. No date or clock dialogs: they cost too many taps.
 - `MainActivity` shows over the lock screen only while an alert is up, and reschedules plus checks for due reminders on every resume.
 
 ## Accessibility

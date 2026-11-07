@@ -5,6 +5,10 @@ This project adheres to [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+- Pick day & time is quicker: tap a day, then a time, and it's saved.
+  No calendar or clock to work through, and Another time takes an
+  exact minute
+
 - A win you put back on the list rings again: if its time has passed,
   it comes back due in 15 minutes instead of waiting for you to open
   Nabbit
