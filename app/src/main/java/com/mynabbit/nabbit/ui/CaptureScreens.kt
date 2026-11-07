@@ -100,7 +100,12 @@ fun WhenStep(verb: Verb, thing: String, theme: NabbitTheme, onSave: (Long) -> Un
             StickyNote(
                 Times.dueDescription(millis).replaceFirstChar { it.uppercase() }, theme.tap3,
                 Modifier.fillMaxWidth().semantics { contentDescription = "Set for ${Times.dueDescription(millis)}" },
-            ) { onSave(maxOf(millis, System.currentTimeMillis() + 60_000)) }
+            ) {
+                // The picked minute, exactly. Only one that's already here or past gets a
+                // few seconds of grace, so it still rings.
+                val now = System.currentTimeMillis()
+                onSave(if (millis > now) millis else now + 5_000)
+            }
         }
     }
 

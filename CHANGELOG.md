@@ -5,6 +5,9 @@ This project adheres to [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+- A time from Pick day & time rings at exactly that minute, even when
+  it's only a minute or two away
+
 - Home says so when a phone setting would make reminders late or
   quiet (notifications, Alarms & reminders, or full-screen alerts),
   with a button to turn it on
