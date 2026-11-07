@@ -35,8 +35,13 @@ object AgeGate {
             val access = manager.requestAgeSignalsAccess(
                 AgeSignalsAccessRequest.builder().setActivity(activity).build(),
             ).await()
-            if (access.ageSignalsStatus() != AgeSignalsStatus.SHARED) {
-                return "${tone.title} stays locked unless you share your age range."
+            when (access.ageSignalsStatus()) {
+                AgeSignalsStatus.SHARED -> Unit
+                AgeSignalsStatus.VERIFICATION_REQUIRED ->
+                    return "Google Play needs to confirm your age first, so ${tone.title} stays locked for now."
+                // Declined on Play's sheet, or Play can't share an age range here (some regions,
+                // emulators, and apps not installed from Play). Nothing to blame the person for.
+                else -> return "Google Play didn't share an age range, so ${tone.title} stays locked."
             }
             // No lower bound means under the lowest gate.
             val floor = manager.checkAgeSignals(AgeSignalsRequest.builder().build()).await().ageLower() ?: 0

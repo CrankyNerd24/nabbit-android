@@ -24,6 +24,7 @@ import androidx.glance.layout.Box
 import androidx.glance.layout.Column
 import androidx.glance.layout.Row
 import androidx.glance.layout.Spacer
+import androidx.glance.layout.fillMaxHeight
 import androidx.glance.layout.fillMaxSize
 import androidx.glance.layout.fillMaxWidth
 import androidx.glance.layout.height
@@ -93,7 +94,7 @@ private fun androidx.glance.layout.RowScope.TileView(tile: Tile, fill: ThemeColo
         .putExtra(MainActivity.EXTRA_VERB, tile.verbRaw)
         .putExtra(MainActivity.EXTRA_THING, tile.thing)
     Box(
-        GlanceModifier.defaultWeight().fillMaxSize().background(fill.color).cornerRadius(8.dp).padding(4.dp)
+        GlanceModifier.defaultWeight().fillMaxHeight().background(fill.color).cornerRadius(8.dp).padding(4.dp)
             .clickable(actionStartActivity(intent))
             .semantics { contentDescription = if (tile.thing == null) "New ${tile.title} reminder" else tile.title },
         contentAlignment = Alignment.Center,
