@@ -289,7 +289,7 @@ private fun MicButton(theme: NabbitTheme, onHeard: (String) -> Unit) {
     val title = when (listener.state) {
         SpeechListener.State.LISTENING -> listener.transcript.ifEmpty { "Listening…" }
         SpeechListener.State.UNAVAILABLE -> "Speech isn't available on this phone."
-        SpeechListener.State.IDLE -> "Say it: “call the dentist tomorrow at 3”"
+        SpeechListener.State.IDLE -> "Say it: “call the dentist tomorrow”"
     }
     val fill = theme.alert
     Row(
@@ -311,8 +311,11 @@ private fun MicButton(theme: NabbitTheme, onHeard: (String) -> Unit) {
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(14.dp),
     ) {
-        Icon(if (listening) Icons.Filled.GraphicEq else Icons.Filled.Mic, null, tint = fill.text.color, modifier = Modifier.size(32.dp))
-        Text(title, color = fill.text.color, fontWeight = FontWeight.SemiBold, fontSize = 17.sp, maxLines = 2)
+        Icon(if (listening) Icons.Filled.GraphicEq else Icons.Filled.Mic, null, tint = fill.text.color, modifier = Modifier.size(36.dp))
+        Text(
+            title, color = fill.text.color, fontWeight = FontWeight.Bold, fontSize = 20.sp, lineHeight = 24.sp,
+            maxLines = 3, overflow = androidx.compose.ui.text.style.TextOverflow.Ellipsis,
+        )
     }
 }
 
