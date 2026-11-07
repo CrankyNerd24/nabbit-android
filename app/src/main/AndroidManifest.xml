@@ -33,6 +33,19 @@
             </intent-filter>
         </activity>
 
+        <receiver android:name=".widgets.NextUpReceiver" android:exported="false" android:label="Next up">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+            <meta-data android:name="android.appwidget.provider" android:resource="@xml/next_up_widget" />
+        </receiver>
+        <receiver android:name=".widgets.QuickAddReceiver" android:exported="false" android:label="Quick add">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+            <meta-data android:name="android.appwidget.provider" android:resource="@xml/quick_add_widget" />
+        </receiver>
+
         <receiver android:name=".alerts.AlertReceiver" android:exported="false" />
         <receiver android:name=".alerts.ActionReceiver" android:exported="false" />
         <receiver android:name=".alerts.RescheduleReceiver" android:exported="true">

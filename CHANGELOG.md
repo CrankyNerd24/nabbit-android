@@ -5,6 +5,11 @@ This project adheres to [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+- Two home screen widgets. Next up shows what's due next with Done,
+  15 min, and Tonight right on it, plus the two after it when it's
+  wide. Quick add holds your hot keys and verbs, so one tap starts a
+  reminder before the thought is gone
+
 - The to-do list: tap the eye at the top of Home for everything coming
   up as notes on a board, slipped first, then today, tomorrow, and each
   day after. Cards or a plain list, tap a note when it's done (with

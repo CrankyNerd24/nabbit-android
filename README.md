@@ -28,6 +28,13 @@ The iPhone version is in the App Store; this is the Android version, in progress
   **Extended controls (…) → Microphone**, turn on "Virtual microphone uses
   host audio input".
 
+### Widgets
+
+Press and hold an empty spot on the emulator's home screen, tap **Widgets**,
+find **Nabbit**, and drag **Next up** or **Quick add** onto the home screen.
+Press and hold a widget, then drag its edges to make it wider for the medium
+layout.
+
 ## Build from the command line
 
 ```

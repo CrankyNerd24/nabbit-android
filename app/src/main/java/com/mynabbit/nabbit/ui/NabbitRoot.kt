@@ -30,6 +30,27 @@ import com.mynabbit.nabbit.model.Times
 import com.mynabbit.nabbit.model.Verb
 import com.mynabbit.nabbit.voice.VoiceParser
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+
+/**
+ * Set when the Quick add widget opens Nabbit: a verb (open its thing step) or a verb
+ * and a thing (open When). Taken by `NabbitRoot` and cleared.
+ */
+object CaptureRequest {
+    data class Target(val verbRaw: String?, val thing: String?)
+
+    private val _target = MutableStateFlow<Target?>(null)
+    val target: StateFlow<Target?> = _target
+
+    fun open(verbRaw: String?, thing: String?) {
+        _target.value = Target(verbRaw, thing)
+    }
+
+    fun clear() {
+        _target.value = null
+    }
+}
 
 /** Where the person is: Home, a capture step, or Settings. */
 sealed interface Screen {
@@ -50,6 +71,17 @@ fun NabbitRoot() {
     val data by Store.data.collectAsState()
 
     var stack by remember { mutableStateOf(listOf<Screen>(Screen.Home)) }
+    val captureTarget by CaptureRequest.target.collectAsState()
+    LaunchedEffect(captureTarget) {
+        val target = captureTarget ?: return@LaunchedEffect
+        val verb = target.verbRaw?.let(Verb::fromRaw)
+        stack = when {
+            verb == null -> listOf(Screen.Home)
+            target.thing != null -> listOf(Screen.Home, Screen.When(verb, target.thing))
+            else -> listOf(Screen.Home, Screen.Thing(verb))
+        }
+        CaptureRequest.clear()
+    }
     var banner by remember { mutableStateOf<Banner?>(null) }
     var celebration by remember { mutableStateOf<Celebration?>(null) }
     // Ticks each minute so "Now" and Slipped stay current.

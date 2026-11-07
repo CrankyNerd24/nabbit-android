@@ -9,6 +9,7 @@ import com.mynabbit.nabbit.data.Reminders
 import com.mynabbit.nabbit.data.Store
 import com.mynabbit.nabbit.model.NudgeTiming
 import com.mynabbit.nabbit.model.ReminderAction
+import com.mynabbit.nabbit.widgets.Widgets
 
 /** An alert or nudge is due: post it, then line up the next step. */
 class AlertReceiver : BroadcastReceiver() {
@@ -25,6 +26,8 @@ class AlertReceiver : BroadcastReceiver() {
             if (current == 0) AlertCenter.show(id)
         }
         Scheduler.reschedule(context)
+        // "Now" and "Slipped" on the widget.
+        Widgets.update(context)
     }
 
     companion object {

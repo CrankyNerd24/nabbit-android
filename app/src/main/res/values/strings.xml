@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="next_up_description">What\'s due next, with Done, 15 min, and Tonight right on it.</string>
+    <string name="quick_add_description">Your hot keys and verbs. One tap starts a reminder.</string>
+</resources>

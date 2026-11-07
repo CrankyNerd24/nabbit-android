@@ -10,6 +10,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import com.mynabbit.nabbit.alerts.AlertCenter
 import com.mynabbit.nabbit.alerts.Scheduler
+import com.mynabbit.nabbit.ui.CaptureRequest
 import com.mynabbit.nabbit.ui.NabbitRoot
 import kotlinx.coroutines.launch
 
@@ -43,13 +44,20 @@ class MainActivity : ComponentActivity() {
     }
 
     private fun handle(intent: Intent?) {
-        if (intent?.action == ACTION_SHOW_ALERT) {
-            intent.getStringExtra(EXTRA_REMINDER)?.let(AlertCenter::show)
+        when (intent?.action) {
+            ACTION_SHOW_ALERT -> intent.getStringExtra(EXTRA_REMINDER)?.let(AlertCenter::show)
+            ACTION_QUICK_ADD -> CaptureRequest.open(
+                intent.getStringExtra(EXTRA_VERB),
+                intent.getStringExtra(EXTRA_THING),
+            )
         }
     }
 
     companion object {
         const val ACTION_SHOW_ALERT = "com.mynabbit.nabbit.SHOW_ALERT"
         const val EXTRA_REMINDER = "reminder"
+        const val ACTION_QUICK_ADD = "com.mynabbit.nabbit.QUICK_ADD"
+        const val EXTRA_VERB = "verb"
+        const val EXTRA_THING = "thing"
     }
 }

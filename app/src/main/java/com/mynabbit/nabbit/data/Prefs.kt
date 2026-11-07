@@ -74,7 +74,13 @@ object Prefs {
             ?.let { runCatching { json.decodeFromString<VerbLayout>(it) }.getOrNull() } ?: VerbLayout()
     }
 
-    fun setTheme(id: String) = set(_themeId, id) { putString("theme", it) }
+    /** Called after theme and verb changes so the widgets redraw. */
+    var onWidgetChange: () -> Unit = {}
+
+    fun setTheme(id: String) {
+        set(_themeId, id) { putString("theme", it) }
+        onWidgetChange()
+    }
     fun setTone(tone: Tone) = set(_tone, tone) { putString("tone", it.name) }
     fun setMorningHour(hour: Int) = set(_morningHour, hour) { putInt("morningHour", it) }
     fun setTonightHour(hour: Int) = set(_tonightHour, hour) { putInt("tonightHour", it) }
@@ -83,8 +89,10 @@ object Prefs {
     fun setThemeIntroShown() = set(_themeIntroShown, true) { putBoolean("themeIntroShown", it) }
     fun setAlertsIntroShown() = set(_alertsIntroShown, true) { putBoolean("alertsIntroShown", it) }
     fun setFridgeShowsList(list: Boolean) = set(_fridgeShowsList, list) { putBoolean("fridgeShowsList", it) }
-    fun setVerbLayout(layout: VerbLayout) =
+    fun setVerbLayout(layout: VerbLayout) {
         set(_verbLayout, layout) { putString("verbLayout", json.encodeToString(VerbLayout.serializer(), it)) }
+        onWidgetChange()
+    }
 
     private fun <T> set(flow: MutableStateFlow<T>, value: T, write: SharedPreferences.Editor.(T) -> Unit) {
         flow.value = value

@@ -6,6 +6,7 @@ import com.mynabbit.nabbit.alerts.Notifier
 import com.mynabbit.nabbit.alerts.Scheduler
 import com.mynabbit.nabbit.data.Prefs
 import com.mynabbit.nabbit.data.Store
+import com.mynabbit.nabbit.widgets.Widgets
 
 class NabbitApp : Application() {
     override fun onCreate() {
@@ -25,7 +26,11 @@ class NabbitApp : Application() {
                 Prefs.init(app)
                 Store.init(app)
                 Notifier.createChannels(app)
-                Store.onChange = { Scheduler.reschedule(app) }
+                Store.onChange = {
+                    Scheduler.reschedule(app)
+                    Widgets.update(app)
+                }
+                Prefs.onWidgetChange = { Widgets.update(app) }
                 started = true
             }
         }
