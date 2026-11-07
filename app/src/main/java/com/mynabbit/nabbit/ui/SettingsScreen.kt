@@ -32,6 +32,7 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.LifecycleEventEffect
 import com.mynabbit.nabbit.BuildConfig
+import com.mynabbit.nabbit.copy.AgeGate
 import com.mynabbit.nabbit.copy.Tone
 import com.mynabbit.nabbit.data.AlertStyle
 import com.mynabbit.nabbit.data.Prefs
@@ -39,6 +40,7 @@ import com.mynabbit.nabbit.data.VerbStore
 import com.mynabbit.nabbit.model.NudgeTiming
 import com.mynabbit.nabbit.model.Times
 import com.mynabbit.nabbit.support.TipJar
+import kotlinx.coroutines.launch
 
 /** Every change applies the moment it's made. No Save button. */
 @OptIn(ExperimentalMaterial3Api::class)
@@ -74,10 +76,28 @@ fun SettingsScreen(theme: NabbitTheme, onRequestNotifications: () -> Unit, onBac
             }
 
             // From the collected state, so the chips redraw the moment the tone changes.
-            val shownTone = tone.takeIf { it.offered } ?: Tone.PLAIN
-            Group("Tone", footer = shownTone.sample +
-                "\nSalty and Sweary need an age check, coming in a later version.") {
-                Choices(Tone.entries.filter { it.offered }, shownTone, { it.title }) { Prefs.setTone(it) }
+            val ageFloor by Prefs.ageFloor.collectAsState()
+            val shownTone = tone.takeIf { AgeGate.allows(it, ageFloor) } ?: Tone.PLAIN
+            var gateNote by remember { mutableStateOf<String?>(null) }
+            val scope = rememberCoroutineScope()
+            Group("Tone", footer = gateNote ?: shownTone.sample) {
+                // Locked tones show their age: "Salty 16+". Tapping one asks Play for the age range once.
+                Choices(Tone.entries, shownTone, { option ->
+                    val minimum = AgeGate.minimumAge(option)
+                    if (minimum != null && !AgeGate.allows(option, ageFloor)) "${option.title} $minimum+" else option.title
+                }) { picked ->
+                    gateNote = null
+                    if (AgeGate.allows(picked, ageFloor)) {
+                        Prefs.setTone(picked)
+                    } else {
+                        val activity = context as? Activity
+                        if (activity == null) {
+                            gateNote = "Age check isn't available here, so ${picked.title} stays locked."
+                        } else {
+                            scope.launch { gateNote = AgeGate.unlock(activity, picked) }
+                        }
+                    }
+                }
             }
 
             Group(

@@ -10,6 +10,7 @@ junit = "4.13.2"
 glance = "1.2.0"
 billing = "8.3.0"
 review = "2.0.2"
+ageSignals = "0.0.4"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -26,6 +27,7 @@ androidx-glance-appwidget = { group = "androidx.glance", name = "glance-appwidge
 androidx-glance-material3 = { group = "androidx.glance", name = "glance-material3", version.ref = "glance" }
 billing-ktx = { group = "com.android.billingclient", name = "billing-ktx", version.ref = "billing" }
 review-ktx = { group = "com.google.android.play", name = "review-ktx", version.ref = "review" }
+age-signals = { group = "com.google.android.play", name = "age-signals", version.ref = "ageSignals" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 kotlinx-serialization-json = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-json", version.ref = "serialization" }
 

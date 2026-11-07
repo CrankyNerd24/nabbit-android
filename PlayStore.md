@@ -42,6 +42,7 @@ installed from Play, including internal testing).
 
 ## Content rating
 
-Plain and Sassy have no swearing. Salty and Sweary aren't offered on Android yet; when
-they are (behind Play's Age Signals), answer the questionnaire for the profanity they
-can show.
+Answer the questionnaire for the most the app can show: Sweary uses f-words in alerts,
+nudges, celebrations, and banners, even though it's locked behind Play's Age Signals
+(16+ for Salty, 18+ for Sweary). Plain and Sassy have no swearing. Gating doesn't lower
+the rating by itself.

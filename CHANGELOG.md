@@ -5,6 +5,10 @@ This project adheres to [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+- Salty (16+) and Sweary (18+) tones: tap one and Google Play asks
+  once to share your age range. If it's shared and old enough, it
+  unlocks; otherwise it stays locked and Plain and Sassy are there
+
 - Nabbit stays free, with no ads and no subscription. If it helps you,
   Settings > Keep Nabbit going takes an optional tip toward the upkeep.
   A tip doesn't unlock anything

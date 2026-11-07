@@ -53,6 +53,9 @@ object Prefs {
     val alertsIntroShown: StateFlow<Boolean> = _alertsIntroShown
     private val _verbLayout = MutableStateFlow(VerbLayout())
     val verbLayout: StateFlow<VerbLayout> = _verbLayout
+    /** The lowest age Google Play's age range has confirmed: 0 until shared, or if under 16. */
+    private val _ageFloor = MutableStateFlow(0)
+    val ageFloor: StateFlow<Int> = _ageFloor
     /** The to-do list as a plain list instead of cards, remembered between visits. */
     private val _fridgeShowsList = MutableStateFlow(false)
     val fridgeShowsList: StateFlow<Boolean> = _fridgeShowsList
@@ -69,6 +72,7 @@ object Prefs {
         _nudgeMinutes.value = prefs.getInt("nudgeMinutes", NudgeTiming.DEFAULT_MINUTES)
         _themeIntroShown.value = prefs.getBoolean("themeIntroShown", false)
         _alertsIntroShown.value = prefs.getBoolean("alertsIntroShown", false)
+        _ageFloor.value = prefs.getInt("ageFloor", 0)
         _fridgeShowsList.value = prefs.getBoolean("fridgeShowsList", false)
         _verbLayout.value = prefs.getString("verbLayout", null)
             ?.let { runCatching { json.decodeFromString<VerbLayout>(it) }.getOrNull() } ?: VerbLayout()
@@ -88,6 +92,7 @@ object Prefs {
     fun setNudgeMinutes(minutes: Int) = set(_nudgeMinutes, minutes) { putInt("nudgeMinutes", it) }
     fun setThemeIntroShown() = set(_themeIntroShown, true) { putBoolean("themeIntroShown", it) }
     fun setAlertsIntroShown() = set(_alertsIntroShown, true) { putBoolean("alertsIntroShown", it) }
+    fun setAgeFloor(age: Int) = set(_ageFloor, age) { putInt("ageFloor", it) }
     fun setFridgeShowsList(list: Boolean) = set(_fridgeShowsList, list) { putBoolean("fridgeShowsList", it) }
     fun setVerbLayout(layout: VerbLayout) {
         set(_verbLayout, layout) { putString("verbLayout", json.encodeToString(VerbLayout.serializer(), it)) }

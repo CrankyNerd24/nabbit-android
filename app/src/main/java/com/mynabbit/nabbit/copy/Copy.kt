@@ -10,18 +10,17 @@ import com.mynabbit.nabbit.model.Verb
  * Whatever the tone, the swearing is at the task, never at the person, and there's
  * still no guilt.
  *
- * Salty (16+) and Sweary (18+) need an age check, which comes with Google Play's Age
- * Signals in a later version. Until then they aren't offered, and a saved one reads
- * as Plain.
+ * Salty (16+) and Sweary (18+) unlock through Google Play's Age Signals (`AgeGate`).
  */
-enum class Tone(val title: String, val sample: String, val offered: Boolean) {
-    PLAIN("Plain", "“Still here. Dentist. Go.”", true),
-    SASSY("Sassy", "“Still here. Dentist. I'm not going anywhere.”", true),
-    SALTY("Salty", "“Still here. Dentist. Let's knock this crap out.” Mild swearing.", false),
-    SWEARY("Sweary", "“Still here. Dentist. Let's get this shit done.” Full swearing.", false);
+enum class Tone(val title: String, val sample: String) {
+    PLAIN("Plain", "“Still here. Dentist. Go.”"),
+    SASSY("Sassy", "“Still here. Dentist. I'm not going anywhere.”"),
+    SALTY("Salty", "“Still here. Dentist. Let's knock this crap out.” Mild swearing."),
+    SWEARY("Sweary", "“Still here. Dentist. Let's get this shit done.” Full swearing.");
 
     companion object {
-        val current: Tone get() = Prefs.tone.value.takeIf { it.offered } ?: PLAIN
+        /** The chosen tone, or Plain if it's age-gated and not unlocked. */
+        val current: Tone get() = Prefs.tone.value.takeIf { AgeGate.allows(it, Prefs.ageFloor.value) } ?: PLAIN
     }
 }
 

@@ -25,7 +25,7 @@ The Android version of **Nabbit**, the ADHD reminder app ("Remind me in Nabbit t
 
 - `model/`: `Verb` (eight built-ins plus `Verb.custom`, stored as "custom:Word"), `Reminder`, `Thing`, `ReminderAction`, and `Timing.kt` (`NudgeTiming`, `WhenPreset`, `Times` for formatting and "tonight at 7:00 PM").
 - `data/`: `Store` (the JSON store, the one save path, `onChange` reschedules alarms), `Prefs` (every setting as a StateFlow), `VerbStore` (added, ordered, and hidden verbs), `Reminders.perform` (Done / 15 min / Tonight from anywhere).
-- `copy/Copy.kt`: `Tone` and every tone-dependent line, ported word for word from iPhone. Add new user-facing lines there in every tone. Salty and Sweary aren't offered until the age check (Google Play Age Signals) is built; `Tone.current` reads a saved one as Plain.
+- `copy/Copy.kt`: `Tone` and every tone-dependent line, ported word for word from iPhone. Add new user-facing lines there in every tone. `copy/AgeGate.kt`: Salty (16) and Sweary (18) unlock through Google Play Age Signals (`com.google.android.play:age-signals`, still 0.x): tapping a locked tone ("Salty 16+") calls `requestAgeSignalsAccess` (Play's sharing sheet), then `checkAgeSignals`; `ageLower` is remembered as `Prefs.ageFloor` so the sheet shows once. Declined, under age, or unavailable keeps it locked with a note. `Tone.current` reads a locked one as Plain.
 - `alerts/`: `Scheduler`, `Notifier`, the receivers, and `AlertCenter` (which reminder the full-screen alert shows; set when an alert fires, a notification is tapped, or the app comes forward with something due).
 - `celebration/`: sizing and rotating lines (`Celebration`, `CelebrationLines`), the confetti overlay (a color flash when animations are off), and `Haptics`.
 - `voice/`: `SpeechListener`, `VoiceParser`.
@@ -42,9 +42,9 @@ Every press-and-hold menu item is also a TalkBack custom action. Banners are liv
 
 ## Version 1 scope
 
-Three taps and the mic, the full-screen alarm with Done / 15 min / Tonight, nudges, Today / Coming up / Wins today, hot keys, Settings (theme, Plain and Sassy tones, default times, alert style, nudge gap, ring-on-time checklist), themes, celebrations, and the two first-open cards.
+Three taps and the mic, the full-screen alarm with Done / 15 min / Tonight, nudges, Today / Coming up / Wins today, hot keys, Settings (theme, tones, default times, alert style, nudge gap, ring-on-time checklist), themes, celebrations, and the two first-open cards.
 
-Next: Salty and Sweary with Age Signals, the bunny icon. Later or never: Wear OS, voice-assistant integration.
+Next: the bunny icon. Later or never: Wear OS, voice-assistant integration.
 
 ## Building and checks
 
